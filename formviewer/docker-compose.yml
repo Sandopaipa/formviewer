@@ -1,0 +1,27 @@
+version: latest
+
+services:
+
+  mongo:
+    image: mongo:7.0.4
+    restart: always
+    volumes:
+      - ./data:/data/templates_db
+    ports:
+      - 27017:27017
+
+  verifier:
+    container_name: formviewer
+    build: .
+    volumes:
+      - .:/formviewer
+    ports:
+      - 8000:8000
+    depends_on:
+    - mongo
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+
+
+
+volumes:
+  data:
